@@ -1,163 +1,192 @@
-# ☁️ AWS Certified Solutions Architect - Professional (SAP-C02)
+# ⚡ AWS Certified Solutions Architect - Professional (SAP-C02)
 
 ![AWS SAP](https://img.shields.io/badge/AWS-Solutions_Architect_Professional-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)
-![Status](https://img.shields.io/badge/Status-In_Progress-yellow?style=for-the-badge)
-![Last Updated](https://img.shields.io/badge/Last_Updated-January_2026-blue?style=for-the-badge)
+![Exam Lang](https://img.shields.io/badge/Exam_Language-English_&_Japanese-red?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-D--Day_March_2026-blue?style=for-the-badge)
 
-> **Study Notes & Roadmap** based on *Ultimate AWS Certified Solutions Architect Professional Slides (v35)* by Stephane Maarek.  
-> This repository documents my journey to mastering advanced AWS architectures, hybrid networking, and migration strategies.
-
----
-
-## 📑 Table of Contents (目次 / 목차)
-
-1.  [🏢 Identity & Organizations](#1-identity--organizations)
-2.  [🌐 Advanced Networking](#2-advanced-networking--connectivity)
-3.  [💻 Compute & Load Balancing](#3-compute-auto-scaling--load-balancing)
-4.  [💾 Storage Strategy](#4-storage-s3-ebs-efs-fsx)
-5.  [📊 Databases & Analytics](#5-databases--analytics)
-6.  [⚡ Serverless & Containers](#6-serverless--containers)
-7.  [🚀 Migration & DR](#7-migration--disaster-recovery)
-8.  [🔒 Security & Cost](#8-security--cost-optimization)
+> **Goal:** SAP-C02 Certification (Exam Center in Japan 🇯🇵)
+> **Strategy:** Understanding in **Korean**, Memorizing keywords in **English & Japanese**.
+> **Note:** Click the `▶` arrows to expand details.
 
 ---
 
-## 1. Identity & Organizations
+## 1. Identity & Organizations (Account Management)
 
-Managing complex multi-account environments and governance.
+<details>
+<summary><strong>📂 1.1 Organizations & SCP (Service Control Policies)</strong></summary>
 
-| Language | Key Concepts |
-| :--- | :--- |
-| **🇺🇸 EN** | • **AWS Organizations:** Hierarchy management with OUs & **SCPs** (Deny > Allow).<br>• **IAM Identity Center:** Centralized SSO, integrating with external IdPs via **SAML 2.0**.<br>• **RAM:** Sharing Subnets & TGW across accounts to simplify network topology. |
-| **🇯🇵 JP** | • **AWS Organizations:** OUと**SCP** (拒否優先) による階層管理。<br>• **IAM Identity Center:** **SAML 2.0** 経由で外部IdPと連携するSSO一元管理。<br>• **RAM:** アカウント間でサブネットやTGWを共有し、ネットワーク構成を簡素化。 |
-| **🇰🇷 KR** | • **AWS Organizations:** OU 및 **SCP**(거부 우선 규칙)를 활용한 계층적 권한 관리.<br>• **IAM Identity Center:** **SAML 2.0** 기반 외부 IdP 연동 및 중앙 집중식 SSO.<br>• **RAM:** 서브넷, TGW 등을 계정 간 공유하여 네트워크 토폴로지 단순화. |
+| Language | Key Concept | Detail |
+| :--- | :--- | :--- |
+| **🇺🇸 EN** | **SCP (Service Control Policy)** | • Explicit **Deny** wins over Allow.<br>• Does not affect the **Management Account**.<br>• Applied to OUs or Accounts. |
+| **🇯🇵 JP** | **SCP (サービスコントロールポリシー)** | • 明示的な **拒否 (Deny)** が許可より優先される。<br>• **管理アカウント (Management Account)** には影響しない。<br>• OU またはアカウントに適用。 |
+| **🇰🇷 KR** | **SCP (서비스 제어 정책)** | • 명시적 **거부**가 허용보다 무조건 우선.<br>• **관리 계정**에는 적용되지 않음 (Root 권한).<br>• 권한을 부여하는 게 아니라 **"필터링(막는 것)"**임. |
 
----
+</details>
 
-## 2. Advanced Networking & Connectivity
+<details>
+<summary><strong>📂 1.2 Identity Federation (SSO)</strong></summary>
 
-The core of the SAP exam. Hybrid clouds and VPC interconnections.
+| Language | Key Concept | Detail |
+| :--- | :--- | :--- |
+| **🇺🇸 EN** | **IAM Identity Center**<br>(formerly AWS SSO) | • Integrates with external IdPs via **SAML 2.0**.<br>• Centralized permission management (Permission Sets). |
+| **🇯🇵 JP** | **IAM Identity Center**<br>(旧 AWS SSO) | • **SAML 2.0** 経由で外部 IdP (Active Directory等) と連携。<br>• 権限セットによる集中管理。 |
+| **🇰🇷 KR** | **IAM Identity Center** | • **SAML 2.0** 표준으로 외부 자격 증명(AD, Okta) 연동.<br>• 멀티 계정 로그인 허브 역할. |
 
-### 🔌 Connectivity Patterns
-* **VPC Peering vs Transit Gateway**
-    * *Peering:* Non-transitive, 1:1 connection. Low latency.
-    * *TGW:* Hub-and-Spoke model. Supports thousands of VPCs & transitive routing.
-* **VPC Endpoints**
-    * **Interface (PrivateLink):** Uses ENI private IP. Accessible from VPN/Peering.
-    * **Gateway:** S3 & DynamoDB only. Route table based. Not accessible from VPN.
-
-### 🌉 Hybrid Networking (On-Prem ↔ AWS)
-* **🇺🇸 English:** **Direct Connect (DX)** provides dedicated/private bandwidth. **Site-to-Site VPN** is used for backup or quick deployment (public internet).
-* **🇯🇵 日本語:** **Direct Connect (DX)** は専用線によるプライベート接続を提供。**VPN** はバックアップまたは迅速な導入（インターネット経由）に使用。
-* **🇰🇷 한국어:** **Direct Connect (DX)**는 전용 물리 회선으로 보안/성능 보장. **VPN**은 공용망을 사용하며 백업 또는 빠른 구축용.
+</details>
 
 ---
 
-## 3. Compute, Auto Scaling & Load Balancing
+## 2. Advanced Networking (🔥 Critical)
 
-Optimizing performance and handling traffic at scale.
+<details>
+<summary><strong>📂 2.1 Connectivity (Peering vs TGW)</strong></summary>
 
-* **📈 Auto Scaling:**
-    * **Dynamic Scaling:** Reacts to metrics (CPU > 70%).
-    * **Predictive Scaling:** Uses ML to schedule scaling ahead of traffic patterns.
-* **⚖️ Load Balancers:**
-    * `ALB (L7)`: Path/Host-based routing, OIDC Auth, Container support.
-    * `NLB (L4)`: Ultra-low latency, **Static IP**, Millions of requests/sec.
-    * `GWLB (L3)`: Deploying 3rd-party firewalls (IPS/IDS) using **Geneve** protocol.
+| Keyword | 🇺🇸 English | 🇯🇵 Japanese | 🇰🇷 Korean (Meaning) |
+| :--- | :--- | :--- | :--- |
+| **Peering** | **Non-transitive** routing.<br>Low latency, 1:1 connection. | **非推移的 (ひすいいてき)** ルーティング。<br>低遅延、1対1接続。 | **전이 안 됨** (A↔B, B↔C여도 A↔C 불가).<br>비용 싸고 빠름. |
+| **Transit Gateway** | **Hub-and-Spoke** topology.<br>Supports thousands of VPCs.<br>Transitive routing allowed. | **ハブアンドスポーク** 型トポロジー。<br>数千の VPC をサポート。<br>推移的ルーティングが可能。 | **허브 앤 스포크** 구조.<br>수천 개 VPC 연결, 라우팅 관리 편함.<br>VPN/DX 중앙 집중화. |
+| **CIDR** | **Overlapping CIDR** issues.<br>Cannot peer directly. Use PrivateLink or NAT. | **重複する CIDR (CIDR の重複)**。<br>直接ピアリング不可。PrivateLink 等で回避。 | **IP 대역 중복**.<br>피어링 불가. PrivateLink로 해결. |
+
+</details>
+
+<details>
+<summary><strong>📂 2.2 VPC Endpoints (PrivateLink)</strong></summary>
+
+| Type | 🇺🇸 EN | 🇯🇵 JP | 🇰🇷 KR |
+| :--- | :--- | :--- | :--- |
+| **Interface** | **ENI** based.<br>Uses Private IP.<br>Accessible via VPN/Peering. | **ENI** ベース。<br>プライベート IP を使用。<br>VPN/ピアリング経由でアクセス **可**。 | **ENI (랜카드)** 방식.<br>유료. 온프레미스/타 VPC에서 접근 **가능**. |
+| **Gateway** | **S3 & DynamoDB** only.<br>Route Table target.<br>**Not** accessible via VPN. | **S3 と DynamoDB** のみ。<br>ルートテーブルで制御。<br>VPN 経由アクセス **不可**。 | **S3, DynamoDB** 전용.<br>무료. 라우팅 테이블 수정.<br>외부(VPN)에서 접근 **불가**. |
+
+</details>
+
+<details>
+<summary><strong>📂 2.3 Hybrid (Direct Connect & VPN)</strong></summary>
+
+| Language | Concept | Detail |
+| :--- | :--- | :--- |
+| **🇺🇸 EN** | **Direct Connect (DX)** | • Dedicated connection (No Public Internet).<br>• Takes weeks to setup.<br>• **DX + VPN** = Low cost HA & Encryption. |
+| **🇯🇵 JP** | **Direct Connect (DX)** | • 専用線接続 (インターネットを経由しない)。<br>• 開通に数週間かかる。<br>• **DX + VPN** = 低コストでの可用性(HA)と暗号化。 |
+| **🇰🇷 KR** | **Direct Connect (DX)** | • 전용 물리 회선 (인터넷 X, 보안 O).<br>• 설치 오래 걸림.<br>• **DX(주) + VPN(백업)** 조합이 국룰. |
+
+</details>
 
 ---
 
-## 4. Storage (S3, EBS, EFS, FSx)
+## 3. Storage Strategy
 
-Choosing the right storage for performance and cost.
+<details>
+<summary><strong>📂 3.1 S3 Storage Classes</strong></summary>
 
-### 🗄️ S3 Storage Classes
-> **Lifecycle Rule:** Standard ➔ IA ➔ Glacier (Instant/Flexible/Deep)
+| Class | 🇺🇸 EN | 🇯🇵 JP | 🇰🇷 KR |
+| :--- | :--- | :--- | :--- |
+| **Intelligent-Tiering** | Auto-tiering based on access patterns.<br>**No retrieval fees**. | アクセスパターンに基づく自動階層化。<br>**取り出し料金なし**。 | 액세스 빈도 따라 자동 이동.<br>**꺼낼 때 비용 0원**. (모니터링 비용만 냄) |
+| **Glacier Deep Archive** | Lowest cost.<br>Retrieval: **12h (Std) / 48h (Bulk)**. | 最安コスト。<br>取り出し: **12時間 (標準) / 48時間 (大容量)**。 | 제일 쌈.<br>꺼내는 데 **12~48시간** 걸림. (RTO 고려 필수) |
+| **Object Lock** | **WORM** (Write Once Read Many).<br>Compliance Mode: Root cannot delete. | **WORM** (書き込みは一度、読み取りは何度でも)。<br>コンプライアンスモード: ルートでも削除不可。 | **삭제 방지 (WORM)**.<br>컴플라이언스 모드는 루트도 삭제 못 함. |
 
-* **🇺🇸 EN:** **Intelligent-Tiering** automatically moves objects based on access patterns (No retrieval fee). **Object Lock** enables WORM (Write Once Read Many).
-* **🇯🇵 JP:** **Intelligent-Tiering** はアクセスパターンに基づいて自動的に階層を移動（取り出し料金なし）。**Object Lock** は WORM モデルを実現。
-* **🇰🇷 KR:** **Intelligent-Tiering**은 액세스 패턴에 따라 계층 자동 이동(수수료 없음). **Object Lock**으로 WORM(임의 삭제 방지) 구현.
+</details>
 
-### 📂 FSx Family (File Server)
-* **FSx for Windows:** SMB, AD Integration.
-* **FSx for Lustre:** High Performance Computing (HPC), linked with S3.
-* **FSx for NetApp ONTAP:** Multi-protocol (NFS/SMB/iSCSI), Deduplication.
+<details>
+<summary><strong>📂 3.2 FSx Family</strong></summary>
+
+- **FSx for Windows:** SMB, AD Integration (Windows Native).
+  - 🇯🇵: Windows ファイルサーバー, AD 統合.
+- **FSx for Lustre:** HPC, Machine Learning, Linked with S3.
+  - 🇯🇵: 高性能コンピューティング (HPC), S3 連携.
+- **FSx for NetApp ONTAP:** Multi-protocol (NFS/SMB), Dedup/Compression.
+  - 🇯🇵: マルチプロトコル, 重複排除/圧縮.
+
+</details>
+
+---
+
+## 4. Compute & Load Balancing
+
+<details>
+<summary><strong>📂 4.1 ELB & Auto Scaling</strong></summary>
+
+| Language | Concept | Detail |
+| :--- | :--- | :--- |
+| **🇺🇸 EN** | **Gateway Load Balancer (GWLB)** | • Layer 3 (IP).<br>• Used for **Firewall Appliances**.<br>• Uses **Geneve** protocol (Port 6081). |
+| **🇯🇵 JP** | **Gateway Load Balancer (GWLB)** | • レイヤー 3。<br>• **ファイアウォールアプライアンス** 向け。<br>• **Geneve** プロトコルを使用。 |
+| **🇰🇷 KR** | **GWLB** | • L3 계층.<br>• 타사 보안 장비(방화벽 등) 앞단에 배치.<br>• Geneve 프로토콜 사용. |
+
+- **Predictive Scaling (予測スケーリング / 예측 스케일링):**
+  - Uses Machine Learning to scale *before* traffic spikes.
+  - 트래픽 패턴이 주기적일 때 사용 (머신러닝 기반).
+
+</details>
 
 ---
 
 ## 5. Databases & Analytics
 
-Handling state and big data.
+<details>
+<summary><strong>📂 5.1 Global Architectures</strong></summary>
 
-| Service | Feature Focus |
-| :--- | :--- |
-| **Aurora** | Multi-Master, **Global Database** (DR < 1s), Serverless v2. |
-| **DynamoDB** | **Global Tables** (Active-Active), **DAX** (Microsecond cache), Streams. |
-| **Kinesis** | **Data Streams** (Real-time, Shards) vs **Firehose** (Load to S3/Redshift). |
-| **Redshift** | **Spectrum** (Query S3 data directly without loading). |
+| Service | 🇺🇸 EN | 🇯🇵 JP | 🇰🇷 KR |
+| :--- | :--- | :--- | :--- |
+| **Aurora Global** | **Cross-Region Replication** < 1s.<br>Disaster Recovery (DR). | **クロスリージョンレプリケーション** 1秒未満。<br>ディザスタリカバリ (DR)。 | 리전 간 복제 1초 미만.<br>읽기 전용 확장 및 DR 용도. |
+| **DynamoDB Global** | **Active-Active** (Multi-Master).<br>Replicates to multiple regions. | **アクティブ/アクティブ** (マルチマスター)。<br>複数リージョンへのレプリケーション。 | **양방향(Active-Active)** 복제.<br>어느 리전에서든 쓰고 읽기 가능. |
 
----
+</details>
 
-## 6. Serverless & Containers
+<details>
+<summary><strong>📂 5.2 Kinesis Data Streams vs Firehose</strong></summary>
 
-Modern application development.
+- **Data Streams (データストリーム):**
+  - Real-time (リアルタイム), Manual Sharding (シャード管理必要).
+  - Data retention (1 day ~ 1 year).
+- **Firehose (ファイアホース):**
+  - Near Real-time (ほぼリアルタイム), Fully Managed (管理不要).
+  - Load data into S3 / Redshift / ElasticSearch (S3等へのデータロード).
 
-### 🧩 Lambda & API Gateway
-* **Provisioned Concurrency:** Solves "Cold Start" issues for latency-sensitive apps.
-* **API Gateway:** Throttling, Caching, Usage Plans (Monetization), API Keys.
-
-### 📦 Containers
-* **ECS:** Simple, AWS-native. Fargate (Serverless) vs EC2 Launch Type.
-* **EKS:** Kubernetes managed service. Complex but standard.
-* **App Runner:** Easiest way to deploy containerized web apps.
+</details>
 
 ---
 
-## 7. Migration & Disaster Recovery
+## 6. Migration & Disaster Recovery (DR)
 
-Moving to the cloud and staying online.
+<details>
+<summary><strong>📂 6.1 DR Strategies (RTO/RPO)</strong></summary>
 
-### 🔄 The 6/7 Rs of Migration
-1.  **Rehost:** Lift & Shift (AWS MGN).
-2.  **Replatform:** Lift & Reshape (e.g., EC2 DB ➔ RDS).
-3.  **Refactor:** Cloud Native (Monolith ➔ Microservices).
+| Strategy | Cost | RTO (Recovery Time) | Description (KR) |
+| :--- | :--- | :--- | :--- |
+| **Backup & Restore** | $ (Low) | Hours/Days | 백업만 해둠. 터지면 그때 복구 시작. |
+| **Pilot Light** | $$ | Tens of Minutes | 데이터는 동기화, 서버는 꺼둠(혹은 초소형). 터지면 켬. |
+| **Warm Standby** | $$$ | Minutes | 서버가 작게 돌아가고 있음. 터지면 스케일 업. |
+| **Multi-Site Active/Active** | $$$$ | Real-time (Zero) | 양쪽 다 쌩쌩 돌아감. 제일 비쌈. |
 
-### 🚨 Disaster Recovery (DR) Strategies
-> **Cost vs. RTO/RPO Trade-off**
+* **🇯🇵 Keywords:** バックアップと復元 / パイロットライト / ウォームスタンバイ / マルチサイト
 
-* **Backup & Restore:** Cheapest, High RTO (Hours/Days).
-* **Pilot Light:** Core services off/scaled down. Data live.
-* **Warm Standby:** Scaled down but running.
-* **Multi-Site Active/Active:** Most expensive, Zero downtime (Near-zero RTO).
+</details>
 
----
+<details>
+<summary><strong>📂 6.2 The 6 Rs of Migration</strong></summary>
 
-## 8. Security & Cost Optimization
+- **Rehost (リホスト):** Lift & Shift. (AWS MGN)
+- **Replatform (リプラットフォーム):** Lift & Reshape. (EC2 DB -> RDS)
+- **Refactor (リファクター):** Re-architecting. (Monolith -> Microservices)
 
-### 🔐 Security (KMS & Protection)
-* **KMS:** Multi-Region Keys are essential for Global DR/Table encryption.
-* **WAF:** Protects ALB/APIGW/CloudFront (Layer 7 - SQLi, XSS).
-* **Shield:** DDoS Protection (Shield Advanced for cost protection).
-
-### 💰 Cost Optimization
-* **Savings Plans:** Flexible (Compute/EC2/SageMaker). Commit to $/hr.
-* **Reserved Instances:** Less flexible. Commit to specific attributes.
-* **Compute Optimizer:** ML-based recommendations for rightsizing.
+</details>
 
 ---
 
-## 📝 Exam Tips (멘토의 조언)
+## 7. Security (KMS)
 
-> **"Think like an Architect, not a SysAdmin."**
+<details>
+<summary><strong>📂 7.1 Key Management Service</strong></summary>
 
-1.  **Requirements First:** Is the priority **Cost**, **Speed**, or **Availability**?
-2.  **Hybrid is Key:** Master the **DX + VPN** backup patterns.
-3.  **No Single Point of Failure:** Always look for **Multi-AZ** and **Decoupling** (SQS/SNS).
+| Feature | 🇺🇸 EN | 🇯🇵 JP | 🇰🇷 KR |
+| :--- | :--- | :--- | :--- |
+| **Multi-Region Keys** | Encrypt in Region A,<br>Decrypt in Region B. | リージョン A で暗号化、<br>リージョン B で復号化。 | 리전 A에서 암호화한 걸<br>리전 B에서 바로 복호화 가능. |
+| **Key Rotation** | Automatic (every 1 year).<br>New backing key generated. | 自動ローテーション (1年ごと)。<br>新しいバッキングキーが生成される。 | 1년마다 자동 교체.<br>키 ID는 안 바뀜 (내부 키만 변경). |
+
+</details>
 
 ---
 
-<div align="center">
+### 📝 Notes & To-Do
 
-**Goal: AWS Solutions Architect Professional (SAP-C02)** 🎯 Target Date: March 2026
-
-</div>
+- [ ] **Maarek Lecture:** Networking Section Complete
+- [ ] **Tutorials Dojo:** Review "High Availability" scenarios
+- [ ] **Hands-on:** VPC Peering vs PrivateLink setup
