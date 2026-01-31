@@ -185,6 +185,152 @@
 
 ---
 
+---
+
+## 🛠 8. Management & Governance (Automation)
+
+<details>
+<summary><strong>📂 8.1 CloudFormation & StackSets</strong></summary>
+
+| Feature | 🇺🇸 EN | 🇯🇵 JP | 🇰🇷 KR |
+| :--- | :--- | :--- | :--- |
+| **StackSets** | Deploy stacks across **multiple accounts & regions**.<br>Target: OUs or Account IDs. | **複数のアカウントとリージョン** にスタックを展開。<br>ターゲット: OU またはアカウント ID。 | **멀티 계정 및 리전**에 한 번에 배포.<br>OU 단위로 자동 배포 가능. |
+| **Drift Detection** | Detects manual changes outside of CFN.<br>Ensures IaC integrity. | **ドリフト検出**。<br>CFN 外の手動変更を検出する。<br>IaC の整合性を保証。 | **드리프트(변경) 감지**.<br>누가 콘솔에서 몰래 바꾼 설정 잡아냄. |
+
+</details>
+
+<details>
+<summary><strong>📂 8.2 Systems Manager (SSM)</strong></summary>
+
+- **Session Manager:**
+  - SSH/Bastion Host 대체. 포트 22번 열 필요 없음 (No open ports).
+  - 🇯🇵: ポート開放不要 (No Inbound Rules).
+- **Patch Manager:**
+  - OS 패치 자동화. Maintenance Windows와 연동.
+  - 🇯🇵: パッチ適用 (Patching) の自動化.
+- **Parameter Store:**
+  - 설정값(Configuration), 비번 저장. (Secrets Manager보다 싸지만 자동 회전 X).
+  - 🇯🇵: パラメータストア.
+
+</details>
+
+<details>
+<summary><strong>📂 8.3 AWS Config & OpsWorks</strong></summary>
+
+- **AWS Config:**
+  - 리소스 변경 이력 추적 & 규정 준수(Compliance) 감시.
+  - **Remediation:** 규정 위반 시 자동 수정(SSM Document 실행).
+  - 🇯🇵: 構成変更の追跡 (Tracking configuration changes).
+- **OpsWorks:**
+  - Chef & Puppet (Legacy). 시험에 "Chef/Puppet" 나오면 무조건 OpsWorks.
+  - 🇯🇵: Chef や Puppet を使用.
+
+</details>
+
+---
+
+## 🧩 9. Serverless & App Integration
+
+<details>
+<summary><strong>📂 9.1 Step Functions (Orchestration)</strong></summary>
+
+| Type | 🇺🇸 EN | 🇯🇵 JP | 🇰🇷 KR |
+| :--- | :--- | :--- | :--- |
+| **Standard** | Long-running (up to 1 year).<br>Exactly-once execution.<br>Checkpointing. | 長時間実行 (最大1年)。<br>正確に1回の実行。<br>チェックポイントあり。 | 장기 실행(최대 1년).<br>안정성 중요. (주문 처리, ETL) |
+| **Express** | Short-lived (up to 5 mins).<br>High throughput (IoT, Streaming).<br>At-least-once. | 短時間実行 (最大5分)。<br>高スループット (IoTなど)。<br>少なくとも1回の実行。 | 초고속/단기(5분).<br>IoT, 스트리밍 데이터 처리. |
+
+</details>
+
+<details>
+<summary><strong>📂 9.2 SQS & SNS & EventBridge</strong></summary>
+
+- **SQS (Queue):**
+  - **FIFO:** 순서 보장 (Order preserved), 정확히 1회 처리 (Exactly-once). 속도 느림.
+  - **Standard:** 무제한 처리량, 순서 보장 X.
+- **SNS (Topic):**
+  - **Fan-out Pattern:** SNS 토픽 하나에 여러 SQS를 구독시켜서 병렬 처리. (🇯🇵: ファンアウトパターン)
+- **EventBridge (Bus):**
+  - SaaS(Salesforce 등) 연동, 스케줄링(Cron), 규칙 기반 라우팅.
+  - **Schema Registry:** 이벤트 구조 자동 감지 및 코드 생성.
+
+</details>
+
+<details>
+<summary><strong>📂 9.3 AppFlow</strong></summary>
+
+- **Concept:** Securely transfer data between SaaS (Salesforce, Slack, ServiceNow) and AWS (S3, Redshift).
+- **Features:** PrivateLink support (No public internet).
+- 🇯🇵: SaaS アプリケーションと AWS 間のデータ転送。
+
+</details>
+
+---
+
+## 💰 10. Cost Optimization
+
+<details>
+<summary><strong>📂 10.1 Savings Plans vs Reserved Instances</strong></summary>
+
+| Type | Flexibility | Commit | Detail |
+| :--- | :--- | :--- | :--- |
+| **Compute SP** | ⭐⭐⭐ (High) | $/hour | Region/Family/OS/Tenancy 상관없음.<br>EC2 + Fargate + Lambda 적용. |
+| **EC2 Instance SP** | ⭐ (Low) | $/hour | 특정 Region & Family(예: m5) 고정.<br>OS 변경은 가능. |
+| **Reserved Instance** | 🌑 (None) | Attributes | Standard RI는 변경 불가.<br>Convertible RI는 교환 가능. |
+
+</details>
+
+<details>
+<summary><strong>📂 10.2 Compute Optimizer</strong></summary>
+
+- **Concept:** Uses ML to analyze history and recommend "Rightsizing".
+- **Targets:** EC2, Auto Scaling Groups, EBS, Lambda, Fargate.
+- **Metric:** Requires CloudWatch Agent for memory utilization data.
+- 🇯🇵: 機械学習を使用してリソースの適正化 (Rightsizing) を推奨。
+
+</details>
+
+<details>
+<summary><strong>📂 10.3 Cost Allocation Tags</strong></summary>
+
+- **Concept:** Tag resources to track costs by department/project.
+- **Important:** Tags must be **activated** in the Billing Console to appear in reports.
+- 🇯🇵: コスト配分タグ (請求コンソールで有効化が必要)。
+
+</details>
+
+---
+
+## 📱 11. Front-end & Mobile (Advanced)
+
+<details>
+<summary><strong>📂 11.1 CloudFront Functions vs Lambda@Edge</strong></summary>
+
+| Feature | CloudFront Functions | Lambda@Edge |
+| :--- | :--- | :--- |
+| **Runtime** | JavaScript (Proprietary) | Node.js, Python |
+| **Execution** | Sub-millisecond (Ultra fast) | ms ~ seconds |
+| **Use Case** | Header manipulation, URL Rewrite.<br>(Simple logic) | Network calls, Auth, Image resizing.<br>(Complex logic) |
+| **Location** | Hundreds of Edge Locations | Regional Edge Caches (Fewer) |
+
+</details>
+
+<details>
+<summary><strong>📂 11.2 Cognito</strong></summary>
+
+- **User Pools:** Authentication (Sign-up/Sign-in). OIDC/SAML. (Identity Provider)
+  - 🇯🇵: 認証 (サインアップ/サインイン)。
+- **Identity Pools:** Authorization (Give AWS Credentials). Access S3/DynamoDB directly.
+  - 🇯🇵: 認可 (AWS クレデンシャルの付与)。
+
+</details>
+
+---
+
+### ✅ Final Check for Exam
+- [ ] **Solution Architect Professional**은 "기술" 뿐만 아니라 **"비용"**과 **"운영 효율"**을 동시에 묻습니다.
+- [ ] 문제에서 **"Most Cost-effective"**가 보이면 -> S3 Lifecycle, Spot Instances, Lambda.
+- [ ] 문제에서 **"Minimizing Operational Overhead"**가 보이면 -> Managed Services (Serverless, Kinesis Firehose, Aurora Serverless).
+
 ### 📝 Notes & To-Do
 
 - [ ] **Maarek Lecture:** Networking Section Complete
