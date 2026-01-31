@@ -326,6 +326,120 @@
 
 ---
 
+---
+
+## 🤖 12. Machine Learning (ML)
+> **Key Point:** 각 AI 서비스의 "용도(Use Case)"만 정확히 알면 됨.
+
+<details>
+<summary><strong>📂 12.1 SageMaker & ML Services</strong></summary>
+
+| Service | 🇺🇸 EN | 🇯🇵 JP | 🇰🇷 KR |
+| :--- | :--- | :--- | :--- |
+| **SageMaker** | Build, Train, Deploy ML models.<br>**Feature Store**: Share features. | MLモデルの構築、トレーニング、デプロイ。<br>**Feature Store**: 特徴量の共有。 | 머신러닝 모델 구축/학습/배포 통합.<br>Feature Store로 데이터 재사용. |
+| **Rekognition** | Image/Video Analysis.<br>Face detection, Content moderation. | 画像/動画分析。<br>顔認識、不適切コンテンツ検出。 | 이미지/동영상 분석.<br>안면 인식, 유해 콘텐츠 차단. |
+| **Transcribe** | **Speech to Text (STT)**.<br>Subtitles, Meeting minutes. | 音声文字起こし (STT)。<br>字幕、議事録作成。 | 음성을 텍스트로 변환.<br>자막 생성, 회의록. |
+| **Polly** | **Text to Speech (TTS)**.<br>Lifelike speech. | テキスト読み上げ (TTS)。<br>自然な音声。 | 텍스트를 음성으로 변환.<br>오디오북, 안내 방송. |
+| **Kendra** | Enterprise Search service.<br>ML-powered document search. | エンタープライズ検索サービス。<br>MLを活用したドキュメント検索。 | 기업용 지능형 검색.<br>사내 문서(Wiki, SharePoint) 검색. |
+| **Textract** | Extract text/data from scanned docs.<br>OCR + Structural analysis (Forms). | スキャン文書からテキスト抽出。<br>OCR + 構造分析 (フォーム)。 | 문서에서 텍스트/표 추출(OCR).<br>영수증, 송장 처리. |
+
+</details>
+
+---
+
+## 📡 13. IoT & Edge Computing
+
+<details>
+<summary><strong>📂 13.1 IoT Core & Greengrass</strong></summary>
+
+- **AWS IoT Core:**
+  - **MQTT** Protocol based.
+  - **Device Gateway:** Connects devices securely.
+  - **Rules Engine:** Route data to Kinesis, S3, Lambda.
+  - 🇯🇵: MQTT プロトコル, デバイスゲートウェイ, ルールエンジン.
+
+- **IoT Greengrass:**
+  - **Edge Computing.** Bring AWS services (Lambda, Docker) to local devices.
+  - Process data locally **even without internet**, then sync to cloud.
+  - 🇯🇵: エッジコンピューティング. オフラインでもローカルで処理可能.
+
+</details>
+
+---
+
+## 🏎️ 14. HPC (High Performance Computing)
+
+<details>
+<summary><strong>📂 14.1 Network & Orchestration</strong></summary>
+
+| Service | Detail |
+| :--- | :--- |
+| **EFA (Elastic Fabric Adapter)** | • Network interface for **HPC / ML**. (Bypasses OS kernel)<br>• Low latency, high throughput.<br>• Use with **MPI** (Message Passing Interface). |
+| **AWS ParallelCluster** | • Open source cluster management tool.<br>• Deploys HPC clusters (Slurm) on AWS easily. |
+
+* **Comparison:**
+  * **ENA (Elastic Network Adapter):** General purpose high speed (EC2).
+  * **EFA:** Specialized for HPC/ML (Inter-node communication).
+
+</details>
+
+---
+
+## 🧱 15. Other Services (Blockchain & Media)
+
+<details>
+<summary><strong>📂 15.1 Miscellaneous</strong></summary>
+
+- **Amazon Managed Blockchain:**
+  - Hyperledger Fabric & Ethereum support.
+  - Decentralized ledger.
+- **Amazon QLDB (Quantum Ledger DB):**
+  - **Centralized**, Immutable, Cryptographically verifiable. (Not Blockchain)
+  - Used for financial transactions history.
+  - 🇯🇵: 集中型, 不変性, 暗号化による検証可能.
+
+- **AWS Elemental MediaConvert:**
+  - Transcode file-based video (S3 -> S3).
+  - 🇯🇵: ファイルベースの動画変換.
+
+</details>
+
+---
+
+## 🏛️ 16. Architecture Patterns (The "Exam Logic")
+> **Key Point:** SAP 시험에 자주 나오는 "필승 패턴" 모음.
+
+<details>
+<summary><strong>👉 Click to see: SAP Exam Patterns</strong></summary>
+
+1. **VPC CIDR Overlap (IP 중복 해결)**
+   - Use **PrivateLink** (Interface Endpoint) to expose specific apps.
+   - Use **NAT Gateway** with complex routing (Harder).
+   - *Never* use Peering directly.
+
+2. **High Performance Storage (성능 이슈)**
+   - EC2 Instance Store (Ephemeral) -> Highest IOPS/Lowest Latency. (Risk: Data loss on stop)
+   - FSx for Lustre -> HPC / ML data processing.
+
+3. **Secure S3 Access (보안 이슈)**
+   - Use **VPC Endpoint (Gateway)**.
+   - Add **Bucket Policy** to allow access *only* from that VPC Endpoint (`aws:sourceVpce`).
+
+4. **DDoS Protection (공격 방어)**
+   - **Shield Advanced** + **WAF** + **CloudFront** + **Route 53**.
+   - Shield Advanced provides "Cost Protection" against scaling spikes due to attacks.
+
+</details>
+
+---
+
+<div align="center">
+
+**🎉 Complete Roadmap for AWS SAP-C02**
+*"Knowledge is power, but Architecture is how you use it."*
+
+</div>
+
 ### ✅ Final Check for Exam
 - [ ] **Solution Architect Professional**은 "기술" 뿐만 아니라 **"비용"**과 **"운영 효율"**을 동시에 묻습니다.
 - [ ] 문제에서 **"Most Cost-effective"**가 보이면 -> S3 Lifecycle, Spot Instances, Lambda.
